@@ -1,0 +1,68 @@
+﻿@page "/notes"
+@using LesChoses.Models
+@using LesChoses.Data;
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext Db
+
+<h1>My French Notes</h1>
+
+<EditForm Model="newNote" OnValidSubmit="AddNote">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Title:</label><br />
+        <InputText @bind-Value="newNote.Title" class="form-control" />
+    </div>
+
+    <div>
+        <label>Content:</label><br />
+        <InputTextArea @bind-Value="newNote.Content" class="form-control" />
+    </div>
+
+    <div>
+        <label>Category:</label><br />
+        <InputText @bind-Value="newNote.Category" class="form-control" />
+    </div>
+
+    <button type="submit">Add Note</button>
+</EditForm>
+
+<hr />
+
+@if (notes.Count == 0)
+{
+    <p>No notes yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var note in notes)
+        {
+            <li>
+                <strong>@note.Title</strong> — @note.Category<br />
+                <em>@note.Content</em><br />
+                <small>@note.CreatedAt.ToLocalTime().ToString("g")</small>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Note> notes = new();
+    private Note newNote = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        notes = await Db.Notes.OrderByDescending(n => n.CreatedAt).ToListAsync();
+    }
+
+    private async Task AddNote()
+    {
+        newNote.CreatedAt = DateTime.UtcNow;
+        Db.Notes.Add(newNote);
+        await Db.SaveChangesAsync();
+        notes = await Db.Notes.OrderByDescending(n => n.CreatedAt).ToListAsync();
+        newNote = new(); // reset form
+    }
+}

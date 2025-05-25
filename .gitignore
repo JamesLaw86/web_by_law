@@ -1,0 +1,40 @@
+# Ignore build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code settings
+.vscode/
+
+# Visual Studio files
+.vs/
+.idea/
+*.csproj.user
+
+# .NET-generated files
+*.db
+*.db-shm
+*.db-wal
+*.pdb
+
+# Logs
+*.log
+
+# Secrets or config (optional - keep only if you don’t want to track it)
+appsettings.Development.json
+
+# Entity Framework Migrations snapshots (optional, if you prefer clean repo)
+Migrations/
+
+# Frontend artifacts
+wwwroot/dist/
+wwwroot/node_modules/
+
+# OS junk
+.DS_Store
+Thumbs.db
