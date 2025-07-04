@@ -8,5 +8,6 @@ namespace LesChoses.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Note> Notes { get; set; }
+        public DbSet<Phrase> Phrases { get; set; }
     }
 }

@@ -22,6 +22,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureDeleted();
+    db.Database.EnsureCreated();
+}
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();

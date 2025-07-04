@@ -1,0 +1,60 @@
+﻿@page "/phrases"
+Choses.Models
+@using LesChoses.Data;
+@using Microsoft.EntityFrameworkCore;
+@using LesChoses.Models;
+@inject AppDbContext Db
+
+<h1>Useful Phrases</h1>
+
+<input type="text" @bind="searchTerm" class="form-control mb-3" placeholder="Search French or English" />
+
+@if (filteredPhrases.Count == 0)
+{
+    <p>No matching phrases found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var phrase in filteredPhrases)
+        {
+            <li>
+                <strong>@phrase.French</strong> — @phrase.English
+                @if (!string.IsNullOrWhiteSpace(phrase.Note))
+                {
+                    <br />
+        
+                    <small><em>@phrase.Note</em></small>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string searchTerm = "";
+    private List<Phrase> allPhrases = new();
+    private List<Phrase> filteredPhrases = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allPhrases = await Db.Phrases.ToListAsync();
+        Filter();
+    }
+
+    private void Filter()
+    {
+        filteredPhrases = allPhrases
+            .Where(p =>
+                string.IsNullOrWhiteSpace(searchTerm)
+                || p.French.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || p.English.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+
+    private async Task OnSearchChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+        Filter();
+    }
+}

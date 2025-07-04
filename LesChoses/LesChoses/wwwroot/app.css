@@ -49,3 +49,11 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.custom-navbar {
+    background-color: #FF0000 !important; /* Dark blue */
+}
+
+.nav-scrollable {
+    background: linear-gradient(to bottom, #004466, #002233) !important;
+}
